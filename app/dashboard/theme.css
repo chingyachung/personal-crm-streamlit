@@ -1,0 +1,730 @@
+:root {
+  --bg: #f5f2ed;
+  --surface: #ffffff;
+  --surface-soft: #fcfaf6;
+  --sidebar: #ede7dd;
+  --primary: #8b6841;
+  --primary-hover: #735536;
+  --border: #f1f5f9;
+  --border-soft: #ddd5c7;
+  --input-bg: #ffffff;
+  --text: #374151;
+  --muted: #6b7280;
+  --placeholder: #9ca3af;
+  --button-text: #ffffff;
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  --shadow-hover: 0 8px 22px rgba(0, 0, 0, 0.08);
+  --focus-border: #cbbba6;
+  --focus-ring: 0 0 0 2px rgba(203, 187, 166, 0.25);
+  --calendar-surface: #ffffff;
+  --calendar-header: #f1ece4;
+  --calendar-soft: #f3eee7;
+  --calendar-selected: #cbbba6;
+  --calendar-selected-text: #374151;
+  --calendar-today: #e8e1d7;
+  --calendar-border: #d8cec0;
+  --status-open-bg: #e8f1ec;
+  --status-open-text: #466a55;
+  --tag-followup-bg: #fff4e5;
+  --tag-followup-text: #a16207;
+  --tag-vip-bg: #f3e8ff;
+  --tag-vip-text: #7e22ce;
+  --tag-hotlead-bg: #fce7e7;
+  --tag-hotlead-text: #b91c1c;
+  --tag-default-bg: #f6e7c8;
+  --tag-default-text: #a16207;
+}
+
+html,
+body,
+input,
+textarea,
+select {
+  color-scheme: light !important;
+}
+
+.stApp {
+  color: var(--text);
+  background: var(--bg);
+}
+
+.stApp,
+.stApp p,
+.stApp span,
+.stApp div,
+.stApp label,
+.stMarkdown,
+.stCaption {
+  color: var(--text);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--text) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em;
+}
+
+[data-testid="stHeader"] {
+  background: var(--bg) !important;
+  border-bottom: 1px solid var(--border-soft) !important;
+}
+
+[data-testid="stHeader"] *,
+[data-testid="stToolbar"] *,
+[data-testid="stDecoration"] * {
+  color: var(--text) !important;
+  fill: var(--text) !important;
+}
+
+[data-testid="stSidebar"] {
+  background: var(--sidebar);
+  border-right: 1px solid var(--border-soft);
+}
+
+[data-testid="stSidebar"] * {
+  color: var(--text) !important;
+}
+
+[data-testid="stSidebar"] .block-container {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p,
+.stCaption {
+  color: var(--muted) !important;
+}
+
+.crm-stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: 16px;
+  padding: 1rem 1.1rem;
+  box-shadow: var(--shadow);
+  min-height: 100px;
+}
+
+.crm-card {
+  background: var(--surface);
+  border: 1px solid #d6dbe3;
+  border-radius: 16px;
+  padding: 1.35rem 1.4rem;
+  margin-bottom: 1.15rem;
+  box-shadow: var(--shadow);
+  transition: all 0.2s ease;
+}
+
+.crm-stat-label {
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 600;
+  margin-bottom: 0.45rem;
+}
+
+.crm-stat-value {
+  color: var(--text);
+  font-size: 1.9rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.crm-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.35rem;
+}
+
+.crm-email {
+  color: var(--muted);
+  margin-bottom: 0.55rem;
+  font-weight: 500;
+}
+
+.crm-message {
+  color: var(--text);
+  line-height: 1.7;
+  margin-bottom: 1rem;
+  font-weight: 500;
+  white-space: pre-line;
+}
+
+.crm-card-interactive {
+  position: relative;
+  cursor: pointer;
+}
+
+.crm-card-interactive:hover {
+  border-color: #cbbba6;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.crm-card-click-anchor {
+  display: none;
+}
+
+[data-testid="stVerticalBlock"]:has(.crm-card-click-anchor) {
+  position: relative;
+}
+
+[data-testid="stVerticalBlock"]:has(.crm-card-click-anchor) > [data-testid="stElementContainer"]:has([data-testid="stButton"]) {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+[data-testid="stVerticalBlock"]:has(.crm-card-click-anchor) > [data-testid="stElementContainer"]:has([data-testid="stButton"]) [data-testid="stButton"] {
+  width: 100%;
+  height: 100%;
+}
+
+[data-testid="stVerticalBlock"]:has(.crm-card-click-anchor) > [data-testid="stElementContainer"]:has([data-testid="stButton"]) [data-testid="stButton"] > button {
+  width: 100%;
+  height: 100%;
+  min-height: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  opacity: 0;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  cursor: pointer;
+}
+
+[data-testid="stVerticalBlock"]:has(.crm-card-click-anchor) > [data-testid="stElementContainer"]:has([data-testid="stButton"]) [data-testid="stButton"] > button:hover,
+[data-testid="stVerticalBlock"]:has(.crm-card-click-anchor) > [data-testid="stElementContainer"]:has([data-testid="stButton"]) [data-testid="stButton"] > button:focus {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.crm-detail-line {
+  color: var(--muted);
+  font-size: 0.92rem;
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+}
+
+.crm-badge {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 0.3rem 0.72rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.crm-badge-label {
+  color: var(--muted);
+  font-size: 0.84rem;
+  font-weight: 600;
+  margin-right: 0.4rem;
+}
+
+.crm-status-open,
+.crm-status-in-progress,
+.crm-status-closed {
+  background: var(--status-open-bg);
+  color: var(--status-open-text);
+}
+
+.crm-tag-follow-up,
+.crm-tag-followup {
+  background: var(--tag-followup-bg);
+  color: var(--tag-followup-text);
+}
+
+.crm-tag-vip {
+  background: var(--tag-vip-bg);
+  color: var(--tag-vip-text);
+}
+
+.crm-tag-hot-lead,
+.crm-tag-hotlead {
+  background: var(--tag-hotlead-bg);
+  color: var(--tag-hotlead-text);
+}
+
+.crm-tag-default,
+.crm-tag-none,
+.crm-followup-due {
+  background: var(--tag-default-bg);
+  color: var(--tag-default-text);
+}
+
+.crm-history-item {
+  border-left: 2px solid var(--border-soft);
+  padding-left: 0.95rem;
+  margin-bottom: 1rem;
+}
+
+.crm-history-date {
+  color: var(--text);
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+
+.crm-history-note {
+  color: var(--muted);
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.crm-history-type {
+  color: var(--text);
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
+
+.crm-panel {
+  background: var(--surface-soft);
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
+}
+
+.block-container {
+  padding-top: 2.4rem;
+  padding-bottom: 2.4rem;
+}
+
+.stButton > button,
+.stForm button,
+div[data-testid="stFormSubmitButton"] > button {
+  background: var(--primary) !important;
+  color: var(--button-text) !important;
+  border: none !important;
+  border-radius: 12px !important;
+  min-height: 44px !important;
+  font-weight: 700 !important;
+  box-shadow: none !important;
+  transition: all 0.2s ease !important;
+}
+
+.stButton > button *,
+.stForm button *,
+div[data-testid="stFormSubmitButton"] > button * {
+  color: var(--button-text) !important;
+  fill: var(--button-text) !important;
+}
+
+.stButton > button p,
+.stButton > button span,
+.stButton > button div,
+.stButton > button:disabled,
+.stButton > button:disabled *,
+.stButton > button[disabled],
+.stButton > button[disabled] * {
+  color: #ffffff !important;
+  fill: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+.stButton > button:disabled,
+.stButton > button[disabled] {
+  background: var(--primary) !important;
+  border-color: transparent !important;
+  filter: none !important;
+}
+
+.stButton > button:hover,
+.stForm button:hover,
+div[data-testid="stFormSubmitButton"] > button:hover {
+  background: var(--primary-hover) !important;
+  color: var(--button-text) !important;
+}
+
+.stButton > button:focus,
+.stForm button:focus,
+div[data-testid="stFormSubmitButton"] > button:focus {
+  box-shadow: 0 0 0 3px rgba(139, 104, 65, 0.15) !important;
+}
+
+div[class*="st-key-remove-follow-up-detail-"] [data-testid="stButton"] > button,
+div[class*="st-key-remove-follow-up-detail-"] button,
+div[class*="st-key-remove-last-contact-detail-"] [data-testid="stButton"] > button,
+div[class*="st-key-remove-last-contact-detail-"] button,
+div[class*="st-key-remove-appointment-detail-"] [data-testid="stButton"] > button,
+div[class*="st-key-remove-appointment-detail-"] button {
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 0 !important;
+  margin-top: 0.15rem !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  color: #b45309 !important;
+  font-size: 0.88rem !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+}
+
+div[class*="st-key-remove-follow-up-detail-"] [data-testid="stButton"] > button *,
+div[class*="st-key-remove-follow-up-detail-"] button *,
+div[class*="st-key-remove-last-contact-detail-"] [data-testid="stButton"] > button *,
+div[class*="st-key-remove-last-contact-detail-"] button *,
+div[class*="st-key-remove-appointment-detail-"] [data-testid="stButton"] > button *,
+div[class*="st-key-remove-appointment-detail-"] button * {
+  color: #b45309 !important;
+  fill: #b45309 !important;
+}
+
+div[class*="st-key-remove-follow-up-detail-"] [data-testid="stButton"] > button:hover,
+div[class*="st-key-remove-follow-up-detail-"] [data-testid="stButton"] > button:focus,
+div[class*="st-key-remove-follow-up-detail-"] button:hover,
+div[class*="st-key-remove-follow-up-detail-"] button:focus,
+div[class*="st-key-remove-last-contact-detail-"] [data-testid="stButton"] > button:hover,
+div[class*="st-key-remove-last-contact-detail-"] [data-testid="stButton"] > button:focus,
+div[class*="st-key-remove-last-contact-detail-"] button:hover,
+div[class*="st-key-remove-last-contact-detail-"] button:focus,
+div[class*="st-key-remove-appointment-detail-"] [data-testid="stButton"] > button:hover,
+div[class*="st-key-remove-appointment-detail-"] [data-testid="stButton"] > button:focus,
+div[class*="st-key-remove-appointment-detail-"] button:hover,
+div[class*="st-key-remove-appointment-detail-"] button:focus {
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #92400e !important;
+}
+
+div[class*="st-key-remove-follow-up-detail-"] [data-testid="stButton"] > button:hover *,
+div[class*="st-key-remove-follow-up-detail-"] [data-testid="stButton"] > button:focus *,
+div[class*="st-key-remove-follow-up-detail-"] button:hover *,
+div[class*="st-key-remove-follow-up-detail-"] button:focus *,
+div[class*="st-key-remove-last-contact-detail-"] [data-testid="stButton"] > button:hover *,
+div[class*="st-key-remove-last-contact-detail-"] [data-testid="stButton"] > button:focus *,
+div[class*="st-key-remove-last-contact-detail-"] button:hover *,
+div[class*="st-key-remove-last-contact-detail-"] button:focus *,
+div[class*="st-key-remove-appointment-detail-"] [data-testid="stButton"] > button:hover *,
+div[class*="st-key-remove-appointment-detail-"] [data-testid="stButton"] > button:focus *,
+div[class*="st-key-remove-appointment-detail-"] button:hover *,
+div[class*="st-key-remove-appointment-detail-"] button:focus * {
+  color: #92400e !important;
+  fill: #92400e !important;
+}
+
+.stTextInput input,
+.stTextArea textarea,
+.stDateInput input,
+.stSelectbox [data-baseweb="select"] > div,
+.stMultiSelect [data-baseweb="select"] > div,
+.stDateInput [data-baseweb="input"] > div,
+.stTextArea [data-baseweb="base-input"],
+.stTextInput [data-baseweb="base-input"],
+.stDateInput [data-baseweb="base-input"] {
+  background: var(--input-bg) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 12px !important;
+  color: var(--text) !important;
+  box-shadow: none !important;
+}
+
+.stTextInput > div,
+.stTextArea > div,
+.stDateInput > div,
+.stSelectbox > div,
+.stMultiSelect > div {
+  background: transparent !important;
+}
+
+.stTextInput input,
+.stTextArea textarea,
+.stDateInput input,
+.stSelectbox [data-baseweb="select"] input,
+.stMultiSelect [data-baseweb="select"] input {
+  color: var(--text) !important;
+}
+
+.stTextInput input::placeholder,
+.stTextArea textarea::placeholder,
+.stDateInput input::placeholder {
+  color: var(--placeholder) !important;
+  opacity: 1 !important;
+}
+
+.stTextInput input:disabled,
+.stTextArea textarea:disabled,
+.stDateInput input:disabled,
+.crm-raw-content textarea:disabled {
+  color: var(--text) !important;
+  -webkit-text-fill-color: var(--text) !important;
+  opacity: 1 !important;
+}
+
+.stTextInput input:focus,
+.stTextArea textarea:focus,
+.stDateInput input:focus,
+.stSelectbox [data-baseweb="select"]:focus-within > div,
+.stMultiSelect [data-baseweb="select"]:focus-within > div,
+.stDateInput [data-baseweb="input"]:focus-within > div {
+  border-color: var(--focus-border) !important;
+  box-shadow: var(--focus-ring) !important;
+  outline: none !important;
+}
+
+.stTextArea textarea {
+  line-height: 1.65;
+  font-weight: 400;
+}
+
+.stTextArea textarea,
+.stTextInput input,
+.stDateInput input {
+  appearance: none !important;
+}
+
+.stDateInput [data-baseweb="input"],
+.stDateInput [data-baseweb="input"] > div,
+.stTextArea [data-baseweb="base-input"],
+.stTextInput [data-baseweb="base-input"] {
+  background: var(--input-bg) !important;
+  border-color: var(--border) !important;
+}
+
+.stDateInput input:invalid,
+.stTextInput input:invalid,
+.stTextArea textarea:invalid {
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.stDateInput svg,
+.stSelectbox [data-baseweb="select"] svg,
+.stMultiSelect [data-baseweb="select"] svg,
+.stExpander svg {
+  fill: var(--text) !important;
+}
+
+.stDateInput input::-webkit-calendar-picker-indicator {
+  filter: none;
+  opacity: 0.85;
+}
+
+.stExpander {
+  border: 1px solid var(--border-soft) !important;
+  border-radius: 14px !important;
+  background: var(--surface) !important;
+}
+
+.stExpander summary,
+.stExpander summary * {
+  color: var(--text) !important;
+}
+
+.crm-raw-content textarea,
+.crm-raw-content textarea:disabled {
+  color: var(--text) !important;
+  line-height: 1.6 !important;
+  -webkit-text-fill-color: var(--text) !important;
+  opacity: 1 !important;
+}
+
+.original-form-content {
+  color: var(--text);
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+.stAlert {
+  border-radius: 14px !important;
+  border: 1px solid var(--border-soft) !important;
+}
+
+.stSuccess {
+  background: #eef5ef !important;
+  color: var(--status-open-text) !important;
+}
+
+.stError {
+  background: #fceeee !important;
+  color: #9f1239 !important;
+}
+
+.stInfo {
+  background: #ffffff !important;
+  color: var(--text) !important;
+  border: 1px solid #f1f5f9 !important;
+}
+
+.stTabs [data-baseweb="tab-list"] {
+  gap: 0.4rem;
+}
+
+.stTabs [data-baseweb="tab"] {
+  background: var(--surface) !important;
+  color: var(--muted) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 10px 10px 0 0 !important;
+}
+
+.stTabs [aria-selected="true"] {
+  color: var(--text) !important;
+  background: var(--surface) !important;
+  border-color: var(--border-soft) !important;
+}
+
+[role="listbox"],
+ul[role="listbox"] {
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--border-soft) !important;
+}
+
+[role="option"] {
+  color: var(--text) !important;
+  background: var(--surface) !important;
+}
+
+[role="option"][aria-selected="true"],
+[role="option"]:hover {
+  background: #f3eee5 !important;
+  color: var(--text) !important;
+}
+
+[data-baseweb="popover"],
+[data-baseweb="calendar"],
+.react-datepicker {
+  background: var(--calendar-surface) !important;
+  border: 1px solid var(--calendar-border) !important;
+  color: var(--text) !important;
+}
+
+[data-baseweb="calendar"] {
+  border-radius: 14px !important;
+  box-shadow: var(--shadow-hover) !important;
+  overflow: hidden !important;
+}
+
+[data-baseweb="popover"] *,
+[data-baseweb="calendar"] *,
+[data-baseweb="calendar"] button {
+  color: var(--text) !important;
+  background: var(--calendar-surface) !important;
+}
+
+[data-baseweb="calendar"] [aria-label*="selected"],
+[data-baseweb="calendar"] [aria-selected="true"] {
+  background: #cbbba6 !important;
+  color: var(--calendar-selected-text) !important;
+  border: none !important;
+  border-radius: 999px !important;
+}
+
+[data-baseweb="calendar"] [aria-label*="Today"] {
+  background: #e8e1d7 !important;
+  color: var(--text) !important;
+  border: 1px solid #cbbba6 !important;
+  border-radius: 999px !important;
+}
+
+[data-baseweb="calendar"] button:hover {
+  background: #f3eee7 !important;
+  color: var(--text) !important;
+  border-radius: 8px !important;
+}
+
+[data-baseweb="calendar"] [data-baseweb="select"] > div,
+[data-baseweb="calendar"] [role="listbox"],
+[data-baseweb="calendar"] [role="option"] {
+  background: var(--calendar-today) !important;
+  border-color: var(--calendar-border) !important;
+  color: #4b5563 !important;
+}
+
+[data-baseweb="calendar"] [role="option"]:hover,
+[data-baseweb="calendar"] [role="option"][aria-selected="true"] {
+  background: var(--calendar-soft) !important;
+  color: var(--text) !important;
+}
+
+.react-datepicker {
+  background: var(--calendar-surface);
+  border: 1px solid var(--calendar-border);
+}
+
+.react-datepicker__header {
+  background: var(--calendar-header);
+  border-bottom: 1px solid var(--calendar-border);
+}
+
+.react-datepicker__month-container,
+.react-datepicker__time-container,
+.react-datepicker__children-container,
+.react-datepicker__triangle,
+.react-datepicker__navigation,
+.react-datepicker__current-month,
+.react-datepicker__day-name,
+.react-datepicker__week,
+.react-datepicker__month,
+.react-datepicker__month-dropdown,
+.react-datepicker__year-dropdown,
+.react-datepicker__month-option,
+.react-datepicker__year-option {
+  background: var(--calendar-surface) !important;
+  color: var(--text) !important;
+}
+
+.react-datepicker__day {
+  color: var(--text);
+}
+
+.react-datepicker__day:hover {
+  background: #f3eee7;
+  color: var(--text);
+  border-radius: 8px;
+}
+
+.react-datepicker__day--selected {
+  background: #cbbba6;
+  color: var(--calendar-selected-text);
+  border: none;
+}
+
+.react-datepicker__day--today {
+  background: #e8e1d7;
+  color: var(--text);
+  border: 1px solid #cbbba6;
+  border-radius: 8px;
+}
+
+[data-baseweb="calendar"] > div,
+[data-baseweb="calendar"] > div > div,
+[data-baseweb="calendar"] [role="grid"],
+[data-baseweb="calendar"] [role="row"],
+[data-baseweb="calendar"] [role="gridcell"],
+.react-datepicker__month-container,
+.react-datepicker__children-container,
+.react-datepicker__portal,
+.react-datepicker__triangle,
+.react-datepicker * {
+  background: #ffffff !important;
+}
+
+a,
+a:visited {
+  color: #5b4a36 !important;
+}
+
+hr {
+  border-color: var(--border-soft) !important;
+}
+
+[data-testid="stForm"] {
+  background: transparent;
+}
+
+@media (max-width: 900px) {
+  .crm-panel {
+    padding: 0;
+    border-radius: 0;
+  }
+}

@@ -1,0 +1,1 @@
+"""Personal CRM application package."""
