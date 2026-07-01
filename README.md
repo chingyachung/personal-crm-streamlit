@@ -1,13 +1,35 @@
-# Personal CRM / Customer Management System
+# Personal CRM
 
-這是一個本地執行的 Personal CRM，使用 `Python + SQLite + Streamlit`，並透過 Google Sheet 作為表單資料來源。
+Personal CRM is a local-first customer management system built for solo operators and small teams who collect leads through Google Forms and want a lightweight internal dashboard without deploying a web app. It syncs Google Sheets data into a local SQLite database, then uses Streamlit to provide a searchable CRM for notes, follow-ups, appointments, and day-to-day customer management.
 
-系統流程如下：
+The project is designed to be practical, maintainable, and easy to extend. Google Sheets remains the external source of form submissions, while SQLite becomes the primary local database for querying, editing, and preserving internal CRM data over time.
+
+## Features
+
+- Sync customer submissions from Google Sheets into a local SQLite database
+- Preserve internal CRM fields separately from the source form data
+- Search customers by name, email, message, and raw synced content
+- Filter by status and tags
+- Manage notes, follow-up dates, last contact dates, and appointments
+- Track contact history and backend activity history
+- Show upcoming and same-day appointments in the dashboard
+- Remove customers automatically when their row is deleted from Google Sheets
+- Run entirely on a local machine with no cloud deployment required
+
+## Tech Stack
+
+- Python
+- Streamlit
+- SQLite
+- Google Sheets API
+- Google Forms
+
+## System Architecture
 
 ```text
 Google Form
     ↓
-Google Sheet
+Google Sheets
     ↓
 Sync Service
     ↓
@@ -16,242 +38,221 @@ SQLite
 Streamlit Dashboard
 ```
 
-重點是：Google Sheet 只作為外部來源，日常查詢與編輯一律走本地 SQLite，因此 `Notes / Status / Tags` 在關閉 Streamlit、重開電腦後仍會永久保留。
+Google Forms and Google Sheets are used only as the external intake layer. After synchronization, the application works primarily against SQLite, which acts as the durable local system of record for CRM operations such as searching, filtering, note-taking, scheduling, and status updates.
 
-> Customer records are managed by Google Sheets. To remove a customer, delete the corresponding row in Google Sheets. The CRM will reflect the change automatically after data synchronization.
+This local-first approach makes the app simple to run, resilient to browser restarts, and suitable for long-term use without relying on direct Google Sheets reads for every interaction.
 
-## 功能
+## Screenshots
 
-- 首次同步 Google Sheet 全部資料到 SQLite
-- 後續增量同步，只新增新的 form submission
-- 已存在資料不覆蓋 `notes`
-- 已存在資料不覆蓋 `status`
-- 已存在資料不覆蓋 `tags`
-- Streamlit CRM 介面
-- 搜尋 `Name / Email / Message`
-- 依 `Status / Tags` 篩選
-- 客戶詳細頁與內部欄位編輯
+![Dashboard](docs/images/dashboard.png)
 
-## 專案結構
+![Customer Detail](docs/images/customer-detail.png)
+
+![Appointments](docs/images/appointments.png)
+
+## Project Structure
 
 ```text
 app/
-├── dashboard/      # Streamlit UI 元件與樣式
-├── database/       # SQLite 連線、schema、初始化
-├── models/         # Domain models
-├── repositories/   # Repository pattern，封裝資料存取
-├── services/       # 業務邏輯，例如 customer update
-├── sync/           # Google Sheets 同步邏輯
-├── app.py          # Streamlit 入口
-└── config.py       # 環境設定與路徑
+├── dashboard/      # Streamlit UI components and shared styling
+├── database/       # SQLite schema, connection helpers, and migrations
+├── models/         # Domain models used across the application
+├── repositories/   # Persistence layer and SQL access
+├── services/       # Business logic and orchestration
+├── sync/           # Google Sheets synchronization logic
+├── app.py          # Main Streamlit application
+└── config.py       # Environment-driven configuration
+
+tests/              # Automated tests
+streamlit_app.py    # Launch entry point
+requirements.txt    # Python dependencies
 ```
 
-## 安裝
+## Installation
 
-### 1. 建立虛擬環境
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/<your-username>/personal-crm-streamlit.git
+cd personal-crm-streamlit
+```
+
+### 2. Create a virtual environment
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-### 2. 安裝依賴
+On Windows:
+
+```bash
+.venv\Scripts\activate
+```
+
+### 3. Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. 設定環境變數
+### 4. Create your local environment file
 
 ```bash
 cp .env.example .env
 ```
 
-編輯 `.env`：
+## Configuration
 
-- `GOOGLE_SHEET_ID`: 你的 Google Sheet ID
-- `GOOGLE_WORKSHEET_NAME`: worksheet 名稱，例如 `formresponse_1`
-- `GOOGLE_*_COLUMN`: 對應 Google Sheet 欄位名稱
-- `GOOGLE_CONTACT_METHOD_COLUMN`: CRM Summary 內顯示的聯絡方式欄位
-- `GOOGLE_LOCATION_COLUMN`: CRM Summary 內顯示的居住地區欄位
-- `GOOGLE_FORM_SUBMISSION_ID_COLUMN`: 如果 Sheet 內有唯一提交 ID，請填該欄位名稱；若留空，系統會用 `timestamp + name + email + message` 產生穩定雜湊 ID
+The application reads configuration from `.env`.
 
-### 4. 準備 Google Service Account
+### Required environment variables
 
-把 service account JSON 放到：
+| Variable | Description |
+| --- | --- |
+| `APP_NAME` | Display name shown in the Streamlit app |
+| `DATABASE_PATH` | Path to the local SQLite database |
+| `GOOGLE_SERVICE_ACCOUNT_FILE` | Path to the Google service account JSON file |
+| `GOOGLE_SHEET_ID` | Google Sheet ID or full Google Sheets URL |
+| `GOOGLE_WORKSHEET_NAME` | Worksheet tab name inside the spreadsheet |
+| `GOOGLE_TIMESTAMP_COLUMN` | Column name for submission timestamp |
+| `GOOGLE_NAME_COLUMN` | Column name mapped to customer name |
+| `GOOGLE_EMAIL_COLUMN` | Column name mapped to customer email |
+| `GOOGLE_MESSAGE_COLUMN` | Column name used as the primary message/summary field |
+| `GOOGLE_CONTACT_METHOD_COLUMN` | Column used for the CRM summary contact method |
+| `GOOGLE_LOCATION_COLUMN` | Column used for the CRM summary location |
+| `GOOGLE_FORM_SUBMISSION_ID_COLUMN` | Optional unique submission ID column |
+| `DEFAULT_STATUS` | Default CRM status for new customers |
+
+### Google Service Account setup
+
+1. Create a Google Cloud project
+2. Enable the Google Sheets API
+3. Create a service account
+4. Download the service account JSON key
+5. Place the file at the path configured in `GOOGLE_SERVICE_ACCOUNT_FILE`
+6. Share the target Google Sheet with the service account email
+
+By default, the project expects:
 
 ```text
 ./credentials/service_account.json
 ```
 
-並且：
+## Usage
 
-1. 到 Google Cloud 建立 Service Account
-2. 啟用 Google Sheets API
-3. 下載 JSON key
-4. 用該 service account email 分享你的 Google Sheet 讀取權限
-
-## 執行
-
-```bash
-streamlit run streamlit_app.py
-```
-
-啟動後：
-
-1. 先按左側 `Sync from Google Sheet`
-2. 系統會建立 SQLite 檔案到 `DATABASE_PATH`
-3. 之後 Dashboard 從 SQLite 讀資料，不會每次重新直連 Google Sheet
-
-如果你想先在命令列手動同步一次，也可以執行：
+### Run a one-time sync from the command line
 
 ```bash
 python -m app.sync.run_sync
 ```
 
-補充：
+### Launch the CRM dashboard
 
-- `GOOGLE_SHEET_ID` 可以填純 ID，也可以直接貼整段 Google Sheet 網址
-- `GOOGLE_WORKSHEET_NAME` 要和工作表分頁名稱完全一致，例如你的 `formresponse_1`
-- 這個版本會同時保存 `raw_json` 和 `raw_text`，方便未來做 RAG
-
-## SQLite Schema
-
-`customers` table:
-
-```sql
-CREATE TABLE customers (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    form_submission_id TEXT NOT NULL UNIQUE,
-    timestamp TEXT,
-    name TEXT NOT NULL,
-    email TEXT NOT NULL,
-    message TEXT NOT NULL,
-    raw_json TEXT NOT NULL DEFAULT '',
-    raw_text TEXT NOT NULL DEFAULT '',
-    notes TEXT NOT NULL DEFAULT '',
-    status TEXT NOT NULL DEFAULT 'Open',
-    tags TEXT NOT NULL DEFAULT '',
-    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
+```bash
+streamlit run streamlit_app.py
 ```
 
-## 同步邏輯
+Once the dashboard is running:
 
-### First Sync
+1. Click **Sync from Google Sheet**
+2. Review newly imported customers
+3. Search, filter, and update CRM fields locally
 
-- 讀取 Google Sheet 所有 rows
-- 轉成 customer records
-- 寫入 SQLite
+The app runs locally by default at:
 
-### Incremental Sync
+```text
+http://localhost:8501
+```
 
-- 以 `form_submission_id` 判斷是否已存在
-- 若已存在：略過，不覆蓋內部欄位
-- 若不存在：新增到 SQLite
-- 若 Google Sheets 中的 row 已刪除：下次同步時會自動從 CRM 移除對應 customer
+## Database Design
 
-這表示以下欄位會永久保留在本地資料庫：
+The primary table is `customers`, which stores both synced submission data and internal CRM fields.
+
+### Customers table
+
+| Field | Purpose |
+| --- | --- |
+| `id` | Local primary key |
+| `form_submission_id` | Stable external submission identifier |
+| `timestamp` | Original form submission time |
+| `name` | Customer name |
+| `email` | Customer email |
+| `message` | Primary summary/message field derived from the form |
+| `raw_json` | Full original row payload as JSON |
+| `raw_text` | Full original row payload as plain text for search/AI use cases |
+| `notes` | Internal notes maintained in the CRM |
+| `status` | Current CRM status |
+| `tags` | Internal tags for segmentation and follow-up |
+| `follow_up_date` | Current next follow-up date |
+| `last_contact_date` | Current last contact date |
+| `appointment_at` | Current appointment datetime |
+| `created_at` | Local record creation timestamp |
+| `updated_at` | Local record update timestamp |
+
+### Contact history
+
+The `contact_history` table stores user-entered interaction notes tied to a customer.
+
+### Activity history
+
+The `activity_history` table stores backend audit records for contact, follow-up, and appointment changes. It is intended for future reporting and historical analytics while the current UI remains focused on the latest CRM state.
+
+## Synchronization Logic
+
+### Initial synchronization
+
+On the first sync, the application reads all rows from the configured Google Sheet, transforms them into customer records, and writes them into SQLite.
+
+### Incremental synchronization
+
+On later syncs, the application only inserts new form submissions and keeps existing local CRM edits intact.
+
+### Preservation of local fields
+
+The following fields are managed locally and are not overwritten during sync:
 
 - `notes`
 - `status`
 - `tags`
 
-另外，每一筆表單也會額外保存：
+This allows the Google Form / Google Sheets pipeline to remain a clean intake source while the CRM stores internal operational data independently.
 
-- `raw_json`: 原始 Google Sheet row JSON
-- `raw_text`: 適合未來餵給 LLM / RAG 的純文字版本
+### Automatic deletion
 
-## 設計說明
+Customer records are managed by Google Sheets. To remove a customer, delete the corresponding row in Google Sheets. The CRM will reflect the change automatically after data synchronization.
+
+## Design Highlights
+
+### Local-first architecture
+
+The system is intentionally local-first. Google Sheets is used for intake, but SQLite is the working database for everything the user does inside the CRM. This keeps the app fast, persistent, and easy to back up.
 
 ### Repository Pattern
 
-- `repositories/customer_repository.py` 專責 SQL 與持久層
-- 未來若從 SQLite 改成 PostgreSQL，可新增另一個 repository implementation，而不是重寫整個 UI
+Database access is isolated in the repository layer, making SQL easier to maintain and future storage migrations more predictable.
 
 ### Service Layer
 
-- `services/customer_service.py` 負責業務規則
-- `sync/sync_service.py` 負責同步流程
-- Streamlit 頁面只負責互動與顯示
+Business rules live in services rather than in Streamlit pages. This keeps UI code lighter and makes features such as scheduling, synchronization, and historical tracking easier to test.
 
-## 未來如何擴充
+### Clear separation of concerns
 
-### Phase 2: PostgreSQL
+- `sync/` handles external data ingestion
+- `repositories/` handles persistence
+- `services/` handles business logic
+- `dashboard/` handles presentation
 
-建議做法：
+That separation keeps the project practical today while leaving room for future growth.
 
-1. 保留 `CustomerService`
-2. 抽象 repository 介面
-3. 新增 PostgreSQL repository
-4. 將 `database/connection.py` 替換成可依環境切換 SQLite / PostgreSQL
+## Future Improvements
 
-目前的分層設計已經把 SQL 與 UI 分開，後續遷移成本會低很多。
+- PostgreSQL support for multi-user or hosted deployments
+- Authentication and role-based access control
+- AI and RAG features over customer notes, form messages, and history
+- Analytics dashboards powered by activity history
+- Richer reporting around appointments, follow-ups, and engagement trends
 
-### Phase 3: Authentication
+## License
 
-可新增：
-
-- `users` table
-- `auth_service.py`
-- Streamlit login gate
-
-由於 customer 資料操作已集中在 service/repository，加入登入不需要重寫同步與資料模型。
-
-### Phase 4: RAG
-
-未來可把以下欄位拿來建知識庫：
-
-- `message`
-- `notes`
-- `raw_text`
-
-可能新增模組：
-
-```text
-app/
-├── rag/
-│   ├── chunking.py
-│   ├── embeddings.py
-│   ├── vector_store.py
-│   └── query_service.py
-```
-
-未來可支援：
-
-- Summarize customer history
-- Find customers mentioning AWS
-- Find customers mentioning Kubernetes
-- Generate follow-up recommendations
-
-## Git Workflow
-
-建議分支結構：
-
-```text
-main
-develop
-feature/*
-```
-
-開發規範：
-
-- 不直接修改 `main`
-- 所有新功能都從 `develop` 建立 `feature/*` 分支
-- `feature/*` 完成後 merge 回 `develop`
-- `develop` 測試完成後再 merge 到 `main`
-- 每次正式發布都建立 git tag
-
-範例：
-
-```bash
-git tag -a v1.0 -m "Initial Release"
-```
-
-## 備註
-
-- SQLite 是唯一日常資料來源
-- Streamlit 關閉後資料不會消失
-- 重新開機後只要保留 `data/crm.sqlite3`，所有內部欄位都會存在
-- 若想備份，只需備份 SQLite 檔案
+This project is released under the MIT License.
