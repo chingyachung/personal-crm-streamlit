@@ -42,14 +42,6 @@ Google Forms and Google Sheets are used only as the external intake layer. After
 
 This local-first approach makes the app simple to run, resilient to browser restarts, and suitable for long-term use without relying on direct Google Sheets reads for every interaction.
 
-## Screenshots
-
-![Dashboard](docs/images/dashboard.png)
-
-![Customer Detail](docs/images/customer-detail.png)
-
-![Appointments](docs/images/appointments.png)
-
 ## Project Structure
 
 ```text
